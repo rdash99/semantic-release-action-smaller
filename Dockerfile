@@ -1,4 +1,14 @@
-FROM node:20.11.0
+ARG NODE_VERSION=20.9.0
+ARG ALPINE_VERSION=3.19.1
+
+FROM node:${NODE_VERSION}-alpine AS node
+
+FROM alpine:${ALPINE_VERSION}
+
+COPY --from=node /usr/lib /usr/lib
+COPY --from=node /usr/local/lib /usr/local/lib
+COPY --from=node /usr/local/include /usr/local/include
+COPY --from=node /usr/local/bin /usr/local/bin
 
 # nice clean home for our action files
 RUN mkdir /action
